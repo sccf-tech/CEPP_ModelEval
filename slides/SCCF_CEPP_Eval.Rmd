@@ -157,9 +157,9 @@ regq.dat.CY.mean%>%
   compose(j="Region",i=~Region=="LWLagoon",value=as_paragraph('Lake Worth Lagoon'))%>%
   set_header_labels("PerDiff_FWO"="FWO vs C240",
                     "PerDiff_ECB"="ECB vs C240")%>%
-  add_header("ECB"="Average annual total discharge",
-             "FWO"="Average annual total discharge",
-             "C240"="Average annual total discharge",
+  add_header("ECB"="Avg Annual total discharge (kAc-Ft Yr\u207B\u00B9)",
+             "FWO"="Avg Annual total discharge (kAc-Ft Yr\u207B\u00B9)",
+             "C240"="Avg Annual total discharge (kAc-Ft Yr\u207B\u00B9)",
              "PerDiff_FWO"="Percent Difference",
              "PerDiff_ECB"="Percent Difference")%>%
   merge_h(part="header")%>%align(align="center",part="header")%>%

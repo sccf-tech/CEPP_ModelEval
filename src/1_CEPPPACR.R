@@ -963,3 +963,350 @@ mtext(side=3,adj=0,"Caloosahatchee MFL")
 mtext(side=3,adj=1,"CY 1965 - 2005")
 dev.off()
 
+
+# LOK ---------------------------------------------------------------------
+## Lake Stage -------------------------------------------------------------
+
+lakeO.stage=data.frame()
+for(i in 1:n.alts){
+  dss_out=opendss(paste0(data.path,alts[i],"/RSMBN_output.dss"))  
+  paths=paste0("/RSMBN/LOK/STAGE/01JAN1965 - 01JAN2005/1DAY/SIMULATED/")
+  tmp=data.frame(getFullTSC(dss_out,paths))
+  tmp$Date=date.fun(date.fun(rownames(tmp))-lubridate::ddays(1))
+  rownames(tmp)<-NULL
+  tmp$Alt=alts[i]
+  lakeO.stage=rbind(tmp,lakeO.stage)
+  print(i)
+}
+unique(lakeO.stage$Alt)
+range(lakeO.stage$Date)
+
+# save(lakeO.stage,file=paste0(data.path,"LOK_stage.RData"))
+load(paste0(data.path,"LOK_stage.RData"))
+
+lakeO.stage$recess_7day=with(lakeO.stage,ave(STAGE,Alt,FUN=function(x) c(rep(NA,6),diff(x,lag=6))))
+
+lakeO.stage$month=as.numeric(format(lakeO.stage$Date,'%m'))
+lakeO.stage$day=as.numeric(format(lakeO.stage$Date,'%d'))
+lakeO.stage$CY=as.numeric(format(lakeO.stage$Date,'%Y'))
+lakeO.stage$DoY=as.numeric(format(lakeO.stage$Date,'%j'))
+lakeO.stage$WY=WY(lakeO.stage$Date)
+lakeO.stage$low.stg=with(lakeO.stage,ifelse(STAGE<11,1,0))
+lakeO.stage$vlow.stg=with(lakeO.stage,ifelse(STAGE<=10,1,0))
+lakeO.stage$High.stg=with(lakeO.stage,ifelse(STAGE>16,1,0))
+lakeO.stage$vHigh.stg=with(lakeO.stage,ifelse(STAGE>=17,1,0))
+
+ann.peak=ddply(lakeO.stage,c("CY","Alt"),summarise,max.stg=max(STAGE,na.rm=T))
+ann.peak$GT17=with(ann.peak,ifelse(round(max.stg,1)>=16.9,1,0))
+
+ann.peak=merge(ann.peak,data.frame(Alt=alts,plot.y=1:3),"Alt")
+
+days.POS=ddply(lakeO.stage,"Alt",summarise,N.days=N.obs(STAGE),
+               sum.mod.high=sum(STAGE>15,na.rm=T),
+               sum.low=sum(low.stg),
+               sum.vlow=sum(vlow.stg),
+               sum.High=sum(High.stg),
+               sum.vHigh=sum(vHigh.stg))
+days.POS=days.POS[match(alts,days.POS$Alt),]
+
+labs=c("% LOK Stage >17 Ft NGVD29 (Exterme High)",
+       "% LOK Stage >15 Ft NGVD29 (Moderate High)",
+       "% LOK Stage <11 Ft NGVD29 (Moderate Low)",
+       "% LOK Stage <10 Ft NGVD29 (Extreme Low)")
+# png(filename=paste0(plot.path,"LOK_stg.png"),width=4,height=5,units="in",res=200,type="windows",bg="white")
+par(family="serif",mar=c(1,2,1,1),oma=c(5,2,2,1),lwd=0.5);
+layout(matrix(1:4,4,1,byrow=F))
+
+ylim.val=c(0,2);by.y=1;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+x=barplot((days.POS$sum.vHigh/14975)*100,col=adjustcolor(cols.alts,0.5),
+          ylim=ylim.val,space=0,axes=F,ann=F)
+axis_fun(2,ymaj,ymin,ymaj)
+axis_fun(1,x,x,NA,cex=0.8,las=2)
+box(lwd=1)
+mtext(side=3,adj=0,line=1.25,"LOK")
+mtext(side=3,adj=0,labs[1],cex=0.7)
+text(x,(days.POS$sum.vHigh/14975)*100,
+     round((days.POS$sum.vHigh/14975)*100,1),font=2,col="black",pos=3,cex=1,offset=0.25)
+
+ylim.val=c(0,40);by.y=20;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+x=barplot((days.POS$sum.mod.high/14975)*100,col=adjustcolor(cols.alts,0.5),
+          ylim=ylim.val,space=0,axes=F,ann=F)
+axis_fun(2,ymaj,ymin,ymaj)
+axis_fun(1,x,x,NA,cex=0.8,las=2)
+box(lwd=1)
+mtext(side=3,adj=0,labs[2],cex=0.7)
+text(x,(days.POS$sum.mod.high/14975)*100,
+     round((days.POS$sum.mod.high/14975)*100,1),font=2,col="black",pos=3,cex=1,offset=0.25)
+
+ylim.val=c(0,14);by.y=7;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+x=barplot((days.POS$sum.low/14975)*100,col=adjustcolor(cols.alts,0.5),
+          ylim=ylim.val,space=0,axes=F,ann=F)
+axis_fun(2,ymaj,ymin,ymaj)
+axis_fun(1,x,x,NA,cex=0.8,las=2)
+box(lwd=1)
+mtext(side=3,adj=0,labs[3],cex=0.7)
+text(x,(days.POS$sum.low/14975)*100,
+     round((days.POS$sum.low/14975)*100,1),font=2,col="black",pos=3,cex=1,offset=0.25)
+
+ylim.val=c(0,6);by.y=3;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+x=barplot((days.POS$sum.vlow/14975)*100,col=adjustcolor(cols.alts,0.5),
+          ylim=ylim.val,space=0,axes=F,ann=F)
+axis_fun(2,ymaj,ymin,ymaj)
+axis_fun(1,x,x,alts,cex=0.8,las=2)
+box(lwd=1)
+mtext(side=3,adj=0,labs[4],cex=0.7)
+text(x,(days.POS$sum.vlow/14975)*100,
+     format(round((days.POS$sum.vlow/14975)*100,1)),font=2,col="black",pos=3,cex=1,offset=0.25)
+mtext(side=2,line=0.5,"Percent of Time",outer=T)
+mtext(side=1,line=4,"Alternative",outer=F)
+dev.off()
+
+
+days.POS2=ddply(lakeO.stage,"Alt",summarise,N.days=N.obs(STAGE),
+                stg.10=(sum(STAGE>10,na.rm=T)/N.days)*100,
+                stg.11=(sum(STAGE>11,na.rm=T)/N.days)*100,
+                stg.12=(sum(STAGE>12,na.rm=T)/N.days)*100,
+                stg.13=(sum(STAGE>13,na.rm=T)/N.days)*100,
+                stg.14=(sum(STAGE>14,na.rm=T)/N.days)*100,
+                stg.15=(sum(STAGE>15,na.rm=T)/N.days)*100,
+                stg.16=(sum(STAGE>16,na.rm=T)/N.days)*100,
+                stg.17=(sum(STAGE>17,na.rm=T)/N.days)*100,
+                stg.18=(sum(STAGE>18,na.rm=T)/N.days)*100
+)
+
+barplot(t(subset(days.POS2,Alt=="FWO")[,3:ncol(days.POS2)]),beside=T,horiz = T)
+barplot(t(subset(days.POS2,Alt=="ASR")[,3:ncol(days.POS2)]),beside=T,horiz = T)
+hist(subset(lakeO.stage,Alt=="FWO")$STAGE,breaks=seq(8,19,1))
+x=hist(subset(lakeO.stage,Alt=="ASR")$STAGE,breaks=seq(8,19,1))
+text(x$mids,x$counts,format(round((x$counts/14975)*100,1)),pos=3,offset=0.1)
+
+# png(filename=paste0(plot.path,"LOK_stg_hist.png"),width=5,height=5.5,units="in",res=200,type="windows",bg="white")
+par(family="serif",mar=c(1,2,0.5,1),oma=c(3,2,1,1),lwd=0.1);
+layout(matrix(1:3,3,1,byrow=F))
+
+ylim.val=c(0,30);by.y=10;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=c(8,19);by.x=1;xmaj=seq(xlim.val[1],xlim.val[2],by.x);xmin=seq(xlim.val[1],xlim.val[2],by.x/2)
+for(i in 1:length(alts)){
+  x=hist(subset(lakeO.stage,Alt==alts[i])$STAGE,xaxs="i",yaxs="i",
+         breaks=seq(8,19,1),ylim=(ylim.val/100)*14975,xlim=xlim.val,
+         axes=F,ann=F,col=adjustcolor(cols.alts[i],0.5))
+  text(x$mids,x$counts,format(round((x$counts/14975)*100,1)),pos=3,offset=0.2)
+  if(i==3){axis_fun(1,xmaj,xmaj,xmaj,line=-0.5)}else{axis_fun(1,xmaj,xmaj,NA)}
+  axis_fun(2,(ymaj/100)*14975,(ymin/100)*14975,ymaj)
+  box(lwd=1)
+  mtext(side=3,adj=0,line=-1.25,paste(" Alt: ",alts[i]))
+}
+mtext(side=2,outer=T,line=0.5,'Percent of Time')
+mtext(side=1,line=2,"Stage (Ft, NGVD29)")
+dev.off()
+
+# Old RECOVER Stage Envelope ----------------------------------------------
+stg.env.vals=read.csv("C:/Julian_LaCie/_GitHub/LOWRP_ModelEval/_resources/LOK_2007StgEnv_Da.csv")
+stg.env.vals$Date=date.fun(stg.env.vals$Date,form="%m/%d/%Y")
+stg.env.vals.da=ddply(stg.env.vals,"Jday",summarise,Env_Low=mean(Env_Low),Env_High=mean(Env_High))
+
+plot(Env_Low~Jday,stg.env.vals.da,ylim=c(11,17),type="l")
+lines(Env_High~Jday,stg.env.vals.da)
+
+stg.env.07=lakeO.stage
+stg.env.07=merge(stg.env.07,stg.env.vals.da,by.x="DoY",by.y="Jday",all.x=T)
+stg.env.07=stg.env.07[order(stg.env.07$Alt,stg.env.07$Date),]
+
+stg.env.07$dev_lower=with(stg.env.07,pmax(0,Env_Low-STAGE))
+stg.env.07$dev_upper=with(stg.env.07,pmax(0,STAGE-Env_High))
+stg.env.07$env=with(stg.env.07,ifelse(dev_upper+dev_lower>0,0,1))
+
+stg.score.07=ddply(stg.env.07,"Alt",summarise,
+                   N.env=(sum(env,na.rm=T)/14975)*100,
+                   N.below.env=(sum(dev_lower>0)/14975)*100,
+                   N.above.env=(sum(dev_upper>0)/14975)*100,
+                   sum.dev_lower.ftdays=sum(dev_lower),
+                   sum.dev_upper.ftdays=sum(dev_upper),
+                   stg_env=(sum(env)/14975)*100,
+                   ex.low=(sum(STAGE<10.0)/14975)*100,
+                   ex.high=(sum(STAGE>17.0)/14975)*100)
+stg.score.07$sum.dev_lower.ftwks=stg.score.07$sum.dev_lower/7
+stg.score.07$sum.dev_upper.ftwks=stg.score.07$sum.dev_upper/7
+
+
+stg.score.07$std.score.exlow=with(stg.score.07,((ex.low/100)*36*52)*-0.185+100)
+stg.score.07$std.score.exhigh=with(stg.score.07,((ex.high/100)*36*52)*-0.253+100)
+# 41-yr Equation
+stg.score.07$std.score.lower=with(stg.score.07,ifelse(sum.dev_lower.ftwks<218.7,100,sum.dev_lower.ftwks*-0.05227+111.429))
+stg.score.07$std.score.higher=with(stg.score.07,sum.dev_upper.ftwks*-0.0469+100)
+
+stg.score.07$wgh.score.exlow=with(stg.score.07,(0.25*std.score.exlow))
+stg.score.07$wgh.score.exhigh=with(stg.score.07,(0.50*std.score.exhigh))
+stg.score.07$wgh.score.std.lower=with(stg.score.07,(0.10*std.score.lower))
+stg.score.07$wgh.score.std.higher=with(stg.score.07,(0.15*std.score.higher))
+stg.score.07$wgh.scr=rowSums(stg.score.07[,c("wgh.score.exlow",
+                                             "wgh.score.exhigh",
+                                             "wgh.score.std.lower",
+                                             "wgh.score.std.higher")])
+stg.score.07=stg.score.07[match(alts,stg.score.07$Alt),]
+
+
+# png(filename=paste0(plot.path,"LOK_OldScore_total_parsed.png"),width=6.5,height=4,units="in",res=200,type="windows",bg="white")
+ylim.val=c(0,105);by.y=20;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+par(family="serif",mar=c(1,2,0.5,1),oma=c(2.5,2,0.5,0.5),lwd=0.5);
+layout(matrix(1:2,1,2),widths=c(1,0.5))
+
+cols.stack=viridis::magma(4,0.5)
+x=barplot(t(stg.score.07[,c("wgh.score.exlow",
+                            "wgh.score.exhigh",
+                            "wgh.score.std.lower",
+                            "wgh.score.std.higher")]),
+          col=cols.stack,ylim=ylim.val,
+          border=adjustcolor("grey30",0.5),names.arg=rep(NA,n.alts),
+          space=0.05,axes=F,ann=F)
+text(x,stg.score.07$wgh.scr,round(stg.score.07$wgh.scr,2),pos=3,offset=0.2)
+axis_fun(1,x,x,alts,line=-0.5)
+axis_fun(2,ymaj,ymin,format(ymaj));box(lwd=1)
+mtext(side=2,line=2.5,"Standardized Score")
+mtext(side=1,line=2,"Alternative")
+
+plot(0:1,0:1,ann=F,axes=F,type="n")
+mtext(side=3,line=-2,"Lake Okeechobee\nEnvelope Penalty Score\nAll Years")
+legend("center",legend=rev(c("Extreme Low", "Extreme High","Below Envelope","Above Envelope")),
+       pch=22,lty=0,lwd=0.1,pt.bg=rev(cols.stack),pt.cex=2,col=adjustcolor("grey30",0.5),
+       ncol=1,cex=0.8,bty="n",y.intersp=1,x.intersp=1,xpd=NA,xjust=0,yjust=1,
+       title.adj = 0,title=" Performance Measure")
+mtext(side=1,line=-1,adj=1,"Simulation Period of\nRecord (1965-2005). \n2007 RECOVER LOK PM",cex=0.75)
+dev.off()
+
+
+
+
+
+# Regulation Schedules ----------------------------------------------------
+zones=c(paste("LOK",paste("ZONE",c("A","B","C","D0","D1","D2","D3"),sep="_"),sep="-"),
+        paste("LOK",paste("LOWSM",c(15,30,45,60),"LEVEL",sep="_"),sep="_"))
+zone.alias=data.frame(zone=zones,
+                      zone2=c(paste("ZONE",c("A","B","C","D0","D1","D2","D3"),sep="_"),paste("LOWSM",c(15,30,45,60),"LEVEL",sep="_")))
+n.alts=length(alts)
+reg.sch=data.frame()
+for(j in 1:3){
+  dss_out=opendss(paste0(data.path,alts[j],"/RSMBN_output.dss"))
+  
+  for(i in 1:length(zones)){
+    paths=paste0("/RSMBN/",zones[i],"/STAGE/01JAN1965 - 01JAN2005/1DAY/INPUT/")  
+    tmp=data.frame(getFullTSC(dss_out,paths))
+    tmp$Date=date.fun(date.fun(rownames(tmp))-lubridate::ddays(1))
+    rownames(tmp)<-NULL
+    tmp$zone=zones[i]
+    tmp$Alt=alts[j]
+    reg.sch=rbind(tmp,reg.sch)
+    print(i)
+  }
+}
+
+unique(reg.sch$Alt)
+unique(reg.sch$zone)
+
+reg.sch$DOY=as.numeric(format(reg.sch$Date,"%j"))
+reg.sch=merge(reg.sch,zone.alias,"zone")
+reg.sch2=reshape2::dcast(reg.sch,Alt+DOY~zone2,value.var = "STAGE",mean)
+
+head(lakeO.stage)
+reg.sch3=reshape2::dcast(reg.sch,Alt+Date~zone2,value.var = "STAGE",mean)
+
+vars=c("Alt","Date","STAGE")
+lakeO.stage.reg=merge(lakeO.stage[,vars],
+                      reg.sch3,c("Alt","Date"))
+
+
+lakeO.stage.reg$above.ZoneD=with(lakeO.stage.reg,ifelse(STAGE>ZONE_C,1,0))
+lakeO.stage.reg$within.ZoneD=with(lakeO.stage.reg,ifelse(STAGE<ZONE_C&STAGE>ZONE_D0,1,0))
+lakeO.stage.reg$below.ZoneD=with(lakeO.stage.reg,ifelse(STAGE<ZONE_D0,1,0))
+
+zone.freq=ddply(lakeO.stage.reg,"Alt",summarise,
+                 above.zoneD=sum(STAGE>ZONE_C),
+                 zoneD=sum(ifelse(STAGE<ZONE_C&STAGE>ZONE_D0,1,0)),
+                 below.zoneD=sum(STAGE<ZONE_D0))
+
+zone.freq=zone.freq[match(Alts,zone.freq$Alt),]
+zone.freq[,2:4]=(zone.freq[,2:4]/14975)*100
+zone.freq.all=zone.freq
+
+vars=c("Date","Alt","above.ZoneD","within.ZoneD","below.ZoneD")
+q.dat.xtab.zones=merge(q.dat.xtab,lakeO.stage.reg[,vars],c("Date","Alt"))
+
+q.dat.xtab.zones$above.ZoneD.CRE=with(q.dat.xtab.zones,S79*above.ZoneD)
+q.dat.xtab.zones$within.ZoneD.CRE=with(q.dat.xtab.zones,S79*within.ZoneD)
+q.dat.xtab.zones$below.ZoneD.CRE=with(q.dat.xtab.zones,S79*below.ZoneD)
+q.dat.xtab.zones$above.ZoneD.CRE.lake=with(q.dat.xtab.zones,S79_QPFCSOURCE_LAKE*above.ZoneD)
+q.dat.xtab.zones$within.ZoneD.CRE.lake=with(q.dat.xtab.zones,S79_QPFCSOURCE_LAKE*within.ZoneD)
+q.dat.xtab.zones$below.ZoneD.CRE.lake=with(q.dat.xtab.zones,S79_QPFCSOURCE_LAKE*below.ZoneD)
+
+q.dat.xtab.zones$above.ZoneD.SLE=with(q.dat.xtab.zones,S80*above.ZoneD)
+q.dat.xtab.zones$within.ZoneD.SLE=with(q.dat.xtab.zones,S80*within.ZoneD)
+q.dat.xtab.zones$below.ZoneD.SLE=with(q.dat.xtab.zones,S80*below.ZoneD)
+q.dat.xtab.zones$above.ZoneD.SLE.lake=with(q.dat.xtab.zones,S80_QPFCSOURCE_LAKE*above.ZoneD)
+q.dat.xtab.zones$within.ZoneD.SLE.lake=with(q.dat.xtab.zones,S80_QPFCSOURCE_LAKE*within.ZoneD)
+q.dat.xtab.zones$below.ZoneD.SLE.lake=with(q.dat.xtab.zones,S80_QPFCSOURCE_LAKE*below.ZoneD)
+
+vars=c("Date","Alt","above.ZoneD.CRE","within.ZoneD.CRE","below.ZoneD.CRE")
+q.dat.xtab.zones.melt=reshape2::melt(q.dat.xtab.zones[,vars],id.vars=vars[1:2])
+# q.dat.xtab.zones.melt2=subset(q.dat.xtab.zones.melt,Alt%in%c("NA25",'260467'))
+
+vars=c("above.ZoneD.CRE","within.ZoneD.CRE","below.ZoneD.CRE")
+density.group.all=data.frame()
+
+for(j in 1:length(alts)){
+  for(i in 1:3){
+    tmp=subset(q.dat.xtab.zones.melt,Alt==alts[j])
+    rng.val=range(log(tmp[tmp$value!=0,]$value),na.rm=T)
+    nx=length(subset(tmp,variable==vars[i])$value)
+    w=rep(1/nx,nx)
+    n.den=512#nx; #default is 512
+    dens=density(log(subset(tmp,variable==vars[i]&value!=0)$value),
+                 # weights=w,   
+                 kernel="gaussian",
+                 from=rng.val[1],
+                 to=rng.val[2],
+                 n = n.den)
+    dens=data.frame(x=exp(dens$x),
+                    y=dens$y,
+                    scaled =  dens$y / max(dens$y, na.rm = TRUE),
+                    ndensity = dens$y / max(dens$y, na.rm = TRUE),
+                    count=dens$y*nx,
+                    n=nx,
+                    group=vars[i])
+    dens$Alt=alts[j]
+    density.group.all=rbind(density.group.all,dens)
+  }
+  print(j)
+}
+
+plot(y~x,density.group.all,log="x")
+cols4=wesanderson::wes_palette("Zissou1", 3, type = "continuous")
+# png(filename=paste0(plot.path,"S79Q_zones.png"),width=6.5,height=3,units="in",res=200,type="windows",bg="white")
+par(family="serif",mar=c(1,1,0.5,0.5),oma=c(2.5,2.5,1,0.5));
+layout(matrix(c(1:3),1,3,byrow=F))
+
+ylim.val=c(0,2.5);by.y=1;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+xlim.val=c(1,20000);xmaj=log.scale.fun(xlim.val,"major");xmin=log.scale.fun(xlim.val,"minor")
+for(i in 1:length(alts)){
+  tmp=subset(density.group.all,Alt==alts[i])
+  plot(y~x,tmp,log="x",xlim=xlim.val,ylim=ylim.val,yaxs="i",type="n",axes=F,ann=F)
+  abline(h=ymaj,v=xmaj,lty=1,col=adjustcolor("grey",0.5))
+  with(subset(tmp,group=="below.ZoneD.CRE"),shaded.range(x,rep(-1,length(x)),y,bg=cols4[1],lty=1,col.adj = 0.5))
+  with(subset(tmp,group=="within.ZoneD.CRE"),shaded.range(x,rep(-1,length(x)),y,bg=cols4[2],lty=1,col.adj = 0.5))
+  with(subset(tmp,group=="above.ZoneD.CRE"),shaded.range(x,rep(-1,length(x)),y,bg=cols4[3],lty=1,col.adj = 0.5))
+  abline(v=c(450,750,2100,2600),lty=2,lwd=0.75)
+  axis_fun(1,xmaj,xmin,xmaj,line=-0.5)
+  if(i==1){axis_fun(2,ymaj,ymin,format(ymaj))}else{axis_fun(2,ymaj,ymin,NA)}
+  box(lwd=1)
+  if(i==1){mtext(side=2,line=2,"Density")}
+  mtext(side=3,adj=0,alts[i])
+  if(i==1){
+    legend("topleft",legend=c("Above Zone D","Within Zone D","Below Zone D"),
+           pch=c(22,22,22),
+           lty=0,lwd=0.01,
+           col=rev(cols4),
+           pt.bg=adjustcolor(rev(cols4),0.5),
+           pt.cex=1,ncol=1,cex=0.8,bty="n",y.intersp=1,x.intersp=0.75,xpd=NA,xjust=0.5,yjust=0.5)
+  }
+}
+mtext(side=1,line=1,outer=T,"S-79 Daily Discharge (ft\u00B3 sec\u207B\u00B9)")
+dev.off()
