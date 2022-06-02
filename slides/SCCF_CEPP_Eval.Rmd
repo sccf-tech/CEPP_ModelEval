@@ -216,7 +216,17 @@ knitr::include_graphics("./Plots/RECOVER_CRE_SalEnv_.png")
 ```
 
 ---
-name: CRE MFL
+name: CRE MFL1
+
+### Caloosahatchee MFL
+
+```{r,out.width="80%",fig.align="center",fig.cap="Caloosahatchee MFL for Alternative C240."}
+
+knitr::include_graphics("./Plots/CRE_MFL_Alt_C240.png")
+```
+
+---
+name: CRE MFL2
 
 ### Caloosahatchee MFL
 
@@ -231,3 +241,4 @@ name: SLE
 ### SLE - Salinity Envelope
 
 * waiting on some additional modeling data
+

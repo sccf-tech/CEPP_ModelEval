@@ -26,6 +26,20 @@ plot.path=paths[1]
 export.path=paths[2]
 data.path=paths[3]
 
+## Functions
+consec.startend=function(var){
+  runs=rle(var)
+  myruns = which(runs$values == TRUE)
+  runs.lengths.cumsum = cumsum(runs$lengths)
+  ends = runs.lengths.cumsum[myruns]
+  newindex = ifelse(myruns>1, myruns-1, 0)
+  starts = runs.lengths.cumsum[newindex] + 1
+  if (0 %in% newindex) starts = c(1,starts)
+  rslt=list(starts=starts,ends=ends)
+  return(rslt)
+}
+
+
 # -------------------------------------------------------------------------
 Alts=c("ECB","FWO","C240")
 n.alts=length(Alts)
@@ -41,8 +55,8 @@ RSM.sites=c("S77","S77BF","S79","S79_QPFCSOURCE_LAKE",
             "S308_QFC","S77_QFC","C10A_QFC",
             "S8_QFC","S150_QFC","S7_QFC","S6_QFC",
             "S8","S150","S7","S6")
+
 # q.dat=data.frame()
-# 
 # for(j in 1:length(Alts)){
 #   dss_out=opendss(paste0(data.path,Alts[j],"/RSMBN_output.dss"))
 #   for(i in 1:length(RSM.sites)){
@@ -59,7 +73,21 @@ RSM.sites=c("S77","S77BF","S79","S79_QPFCSOURCE_LAKE",
 #     print(i)
 #   }
 # }
-# 
+# for(j in 2:n.alts){
+#   dss_out=opendss(paste0(data.path,Alts[j],"/RSMBN_output.dss"))  
+#   
+#   paths=paste0("/RSMBN/STA2TMC/FLOW/01JAN1965 - 01JAN2005/1DAY/SIMULATED/")  
+#   tmp=data.frame(getFullTSC(dss_out,paths))
+#   tmp$Date=date.fun(date.fun(rownames(tmp))-lubridate::ddays(1))
+#   rownames(tmp)<-NULL
+#   tmp=tmp[,c(2,1)]
+#   colnames(tmp)=c("Date","Data.Value")
+#   tmp$parameter="FLOW"
+#   tmp$SITE="STA2TMC"
+#   tmp$Alt=Alts[j]
+#   q.dat=rbind(tmp,q.dat)
+#   print(j)
+# }
 # range(q.dat$Date)
 # unique(q.dat$parameter)
 # unique(q.dat$SITE)
@@ -341,10 +369,19 @@ q.dat.xtab$S80_QPFCSOURCE_LAKE=apply(q.dat.xtab[,c("S308","S80")],1,min,na.rm=T)
 q.dat.xtab$S80_QPFCSOURCE_LAKE.14d=with(q.dat.xtab,ave(S80_QPFCSOURCE_LAKE,Alt,FUN=function(x) c(rep(NA,13),rollapply(x,width=14,FUN=function(x)mean(x,na.rm=T)))))
 q.dat.xtab$S308_QFC.14d=with(q.dat.xtab,ave(S308_QFC,Alt,FUN=function(x) c(rep(NA,13),rollapply(x,width=14,FUN=function(x)mean(x,na.rm=T)))))
 
+# 2007 Sal Metric
+q.dat.xtab$sltrib=rowSums(q.dat.xtab[,c("TMC2EST","S48","S49","NSF2EST","sle_gw",'STA2TMC')],na.rm=T)
+q.dat.xtab$slbsn=with(q.dat.xtab,S80-S308_QFC+sltrib)
+q.dat.xtab$slbsn.14d=with(q.dat.xtab,ave(slbsn,Alt,FUN=function(x) c(rep(NA,13),rollapply(x,width=14,FUN=function(x)mean(x,na.rm=T)))))
+q.dat.xtab$sltotal=with(q.dat.xtab,S80+sltrib)
+q.dat.xtab$sltotal.14d=with(q.dat.xtab,ave(sltotal,Alt,FUN=function(x) c(rep(NA,13),rollapply(x,width=14,FUN=function(x)mean(x,na.rm=T)))))
+
 q.dat.xtab$SLE.low=with(q.dat.xtab,ifelse(SLE.S80trib.14d<150,1,0)) # RECOVER Low
 q.dat.xtab$SLE.opt=with(q.dat.xtab,ifelse(SLE.S80trib.14d>=150&SLE.S80trib.14d<1400,1,0)) # RECOVER Optimum
 q.dat.xtab$SLE.high=with(q.dat.xtab,ifelse(SLE.S80trib.14d>=1400&SLE.S80trib.14d<1700,1,0)) # RECOVER stress
 q.dat.xtab$SLE.dam=with(q.dat.xtab,ifelse(SLE.S80trib.14d>=1700,1,0)) # RECOVER damaging
+q.dat.xtab$SLE.2000=with(q.dat.xtab,ifelse(sltotal.14d>2000,1,0))
+q.dat.xtab$SLE.2000.bsn=with(q.dat.xtab,ifelse(slbsn.14d>2000,1,0))
 
 ##
 q.dat.xtab$CRE.low.count=0
@@ -415,6 +452,74 @@ for(j in 1:length(alts)){
   print(j)
 }
 
+# Old RECOVER Salinity envelope based on monthly Q
+# SLE
+q.dat.xtab$SLE.2000.count=0
+q.dat.xtab$SLE.2000.count.LOK=0
+q.dat.xtab$SLE.2000.count.bsn=0
+q.dat.xtab3=data.frame()
+for(j in 1:length(alts)){
+  tmp=subset(q.dat.xtab,Alt==alts[j])
+  for(i in 14:nrow(tmp)){
+    tmp$SLE.2000.count[i]=with(tmp,ifelse(sum(SLE.2000[(i-13):i],na.rm=T)==14&sum(SLE.2000.count[(i-13):(i-1)],na.rm=T)==0,1,0))
+    tmp$SLE.2000.count.bsn[i]=with(tmp,ifelse(sum(SLE.2000.bsn[(i-13):i],na.rm=T)==14&sum(SLE.2000.count.bsn[(i-13):(i-1)],na.rm=T)==0,1,0))
+  }
+  q.dat.xtab3=rbind(q.dat.xtab3,tmp)
+  print(j)
+}
+
+## sle_gw file might be different than LOWRP
+SLE_SalEnv2000=ddply(q.dat.xtab3,"Alt",summarise,
+                     SLE.2000.total=sum(SLE.2000.count,na.rm = T),
+                     SLE.2000.bsn=sum(SLE.2000.count.bsn,na.rm = T))
+SLE_SalEnv2000$SLE.2000.lok=with(SLE_SalEnv2000,SLE.2000.total-SLE.2000.bsn)
+
+SLE.sal.env=ddply(q.dat.xtab,c("Alt","CY","month"),summarise,month.Q=mean(SLE.S80trib,na.rm=T))
+SLE.sal.env$lowQ=with(SLE.sal.env,ifelse(month.Q<=350,1,0))
+SLE.sal.env$highQ=with(SLE.sal.env,ifelse(month.Q>=2000&month.Q<3000,1,0))
+SLE.sal.env$ext.highQ=with(SLE.sal.env,ifelse(month.Q>3000,1,0))
+SLE.sal.env.sum=ddply(SLE.sal.env,"Alt",summarise,
+                      N.low=sum(lowQ,na.rm=T),
+                      N.highQ=sum(highQ,na.rm=T),
+                      N.ext.highQ=sum(ext.highQ,na.rm=T))
+SLE.sal.env.sum=SLE.sal.env.sum[match(alts,SLE.sal.env.sum$Alt),]
+SLE.sal.env.sum
+
+SLE.sal.env.sum2=merge(SLE.sal.env.sum,SLE_SalEnv2000[,c("Alt","SLE.2000.bsn","SLE.2000.lok")],"Alt")
+vars=c("Alt", "N.low","SLE.2000.bsn", "SLE.2000.lok", "N.highQ", "N.ext.highQ")
+SLE.sal.env.sum2=SLE.sal.env.sum2[match(alts,SLE.sal.env.sum2$Alt),vars]
+
+
+# CRE
+CRE.sal.env=ddply(q.dat.xtab,c("Alt","CY","month"),summarise,month.Q=mean(S79,na.rm=T))
+CRE.sal.env$lowQ=with(CRE.sal.env,ifelse(month%in%c(10:12,1:7)&month.Q<=450,1,0))
+CRE.sal.env$highQ=with(CRE.sal.env,ifelse(month.Q>2800,1,0))
+CRE.sal.env$ext.highQ=with(CRE.sal.env,ifelse(month.Q>4500,1,0))
+
+CRE.sal.env.sum=ddply(CRE.sal.env,c("Alt"),summarise,
+                      N.lowQ=sum(lowQ),
+                      N.highQ=sum(highQ),
+                      N.ext.highQ=sum(ext.highQ))
+CRE.sal.env.sum=CRE.sal.env.sum[match(alts,CRE.sal.env.sum$Alt),]
+
+CRE.sal.env.consec=data.frame()
+for(j in 1:length(alts)){
+  tmp=subset(CRE.sal.env,Alt==alts[j])
+  tmp$highQ.N=0
+  for(i in 2:nrow(tmp)){
+    tmp$highQ.N[i]=with(tmp,ifelse(highQ[i-1]==0&highQ[i]>0,1,
+                                   ifelse(highQ[i-1]>0&highQ[i]>0,1,0)))
+    
+  }
+  CRE.highQ=consec.startend(tmp$highQ.N>0)
+  tmp$sum.highQ=0
+  for(i in 1:length(CRE.highQ$ends)){
+    tmp[CRE.highQ$ends[i],]$sum.highQ=with(tmp[c(CRE.highQ$starts[i]:CRE.highQ$ends[i]),],sum(highQ.N,na.rm=T))
+  }
+  CRE.sal.env.consec=rbind(tmp,CRE.sal.env.consec)
+  print(j)
+}
+rslt.CREHighQ=ddply(CRE.sal.env.consec,c("Alt","sum.highQ"),summarise,count.event=N.obs(sum.highQ))
 
 q.dat.xtab2$cum.CRE.opt.count=with(q.dat.xtab2,ave(CRE.opt.count,Alt,FUN = function(x) cumsum(x)))
 q.dat.xtab2$cum.CRE.dam.LOK.count=with(q.dat.xtab2,ave(CRE.dam.LOK.count,Alt,FUN = function(x) cumsum(x)))
@@ -423,7 +528,6 @@ plot(cum.CRE.opt.count~Date,q.dat.xtab2,type="n")
 lines(cum.CRE.opt.count~Date,subset(q.dat.xtab2,Alt==Alts[1]),col=cols.alts[1],lwd=2)
 lines(cum.CRE.opt.count~Date,subset(q.dat.xtab2,Alt==Alts[2]),col="green",lwd=2,lty=1)
 lines(cum.CRE.opt.count~Date,subset(q.dat.xtab2,Alt==Alts[3]),col=cols.alts[3],lwd=2)
-
 
 # png(filename=paste0(plot.path,"example_CCount_CRE_LOKDAM.png"),width=6.5,height=4,units="in",res=200,type="windows",bg="white")
 par(family="serif",mar=c(1,2,1,0.5),oma=c(2,2,0.5,0.25),lwd=0.5);
@@ -526,16 +630,12 @@ flextable()%>%
   fix_border_issues()
 
 
-
-
-
-
-SalEnv_count2=reshape2::dcast(SalEnv_count.melt,Alt+CY~variable,value.var = "value",sum)
-glm.test=glm(CRE.opt.count~Alt,SalEnv_count2,family=poisson())
-glm.test=glm(CRE.high.LOK.count~Alt,SalEnv_count2,family=poisson())
-summary(glm.test)
-layout(matrix(1:4,2,2));plot(glm.test)
-hist(residuals(glm.test))
+# SalEnv_count2=reshape2::dcast(SalEnv_count.melt,Alt+CY~variable,value.var = "value",sum)
+# glm.test=glm(CRE.opt.count~Alt,SalEnv_count2,family=poisson())
+# glm.test=glm(CRE.high.LOK.count~Alt,SalEnv_count2,family=poisson())
+# summary(glm.test)
+# layout(matrix(1:4,2,2));plot(glm.test)
+# hist(residuals(glm.test))
 
 ###
 
@@ -604,6 +704,36 @@ legend("topleft",legend=c("CEPP PACR (1965 - 2005)","LOWRP (1965 - 2005)","LOSOM
        col=c("black"),
        pt.bg=c("indianred1","dodgerblue1","forestgreen"),
        pt.cex=1.5,ncol=1,cex=1,bty="n",y.intersp=1,x.intersp=0.75,xpd=NA,xjust=0.5,yjust=0.5)
+dev.off()
+
+
+vars.CRE=paste("CRE",c("low.count","opt.count","high.LOK.count","dam.LOK.count","high3.count"),sep=".")
+CRE.SalEnv_count3=SalEnv_count[,c("Alt",vars.CRE)]
+CRE.labs=c("Low Flow\n(<750 cfs)","Optimum\n(750 - 2100 cfs)","Stress From LOK\n(2100 - 2600 cfs)","Damaging From LOK\n(>2600 cfs)","Extreme\n(>6500 cfs)")
+# png(filename=paste0(plot.path,"RECOVER_CRE_SalEnv_2007PM.png"),width=6.5,height=3.5,units="in",res=200,type="windows",bg="white")
+layout(matrix(c(1:3),1,3,byrow=T))
+par(family="serif",mar=c(2,2,1,1),oma=c(3,3,2,1),lwd=0.5);
+
+CRE.labs.old=c("Low Flow\n(<450 cfs Basin & LOK)","High Flow\n(>2800 cfs Basin & LOK)","Extreme High Flow\n(>4500 cfs Basin & LOK)")
+ymax=c(200,100,100)
+yval=ymax/2
+for(i in 2:4){
+  ylim.val=c(0,ymax[i-1]);ymaj=seq(ylim.val[1],ylim.val[2],yval[i-1]);ymin=seq(ylim.val[1],ylim.val[2],yval[i-1]/2)
+  x=barplot(CRE.sal.env.sum[,i],col=adjustcolor(cols.alts,0.5),ylim=ylim.val,axes=F,ann=F,space=0)
+  axis_fun(2,ymaj,ymin,ymaj)
+  axis_fun(1,x,x,alts,cex=1,las=1)
+  # axis_fun(1,x,x,alts,cex=0.7,las=2)
+  # abline(v=c(x[1]+(x[2]-x[1])/2,x[3]+(x[4]-x[3])/2),lwd=1)
+  box(lwd=1)
+  mtext(side=3,adj=0,CRE.labs.old[i-1],cex=0.5)
+  text(x,CRE.sal.env.sum[,i],
+       round(CRE.sal.env.sum[,i],0),font=2,col="black",pos=3,cex=0.75,offset=0.25)
+  if(i==2){mtext(side=2,line=2.5,"Number of Exceedances")}
+}
+mtext(side=1,outer=T,"Alternatives")
+mtext(side=1,outer=T,line=1.5,adj=0,
+      "2007 RECOVER Salinity Envelope Performance Metric based on mean monthly discharge at S-79",
+      cex=0.5,font=3)
 dev.off()
 
 
@@ -699,3 +829,137 @@ mtext(side=3,adj=0,"St Lucie Estuary\nAlternative: C240")
 mtext(side=1,line=2.5,outer=F,"Salinity Envelope Category")
 mtext(side=2,line=2.5,outer=F,"% Difference relative to FWO")
 dev.off()
+
+# CRE MFL -----------------------------------------------------------------
+q.dat.xtab$mfl.exceed=with(q.dat.xtab,ifelse(is.na(S79.30d)==T,0,ifelse(S79.30d<457,1,0)))
+CRE.mfl.rslt=data.frame()
+q.dat1.xtab.mfl=data.frame()
+for(j in 1:n.alts){
+  
+  tmp=subset(q.dat.xtab,Alt==alts[j])
+  ## Adapted from mflst_cre_v2.py
+  for(i in 2:nrow(tmp)){
+    if(tmp$mfl.exceed[i-1]==1&tmp$mfl.exceed[i]==0){
+      tmp$exceed_end[i-1]=1 #found the last exceedance dates 
+    }else{
+      tmp$exceed_end[i-1]=0
+    }
+  }
+  
+  # subset(tmp,exceed_end==1)
+  
+  tmp$countdown=0
+  tmp$exceed2=NA
+  counts=0
+  exc_n=0
+  for(i in 30:nrow(tmp)){
+    # rest counts
+    if(tmp$mfl.exceed[i-1]==0&tmp$mfl.exceed[i]==1){
+      counts=1
+    }
+    
+    if(tmp$exceed_end[i]==1){
+      if(tmp$countdown[i-1]<1){
+        tmp$countdown[i]=365
+      }else{
+        tmp$countdown[i]=tmp$countdown[i-1]-1
+        if(tmp$countdown[i]==0 & tmp$mfl.exceed[i]==1){
+          tmp$countdown[i]=365
+        }
+      }
+    }else{
+      tmp$countdown[i]=tmp$countdown[i-1]-1
+      counts=counts+1
+      
+      if(counts>366 & tmp$mfl.exceed[i]==1){
+        tmp$countdown[i]=365
+        counts=0
+      }
+      if(tmp$countdown[i]==0 & tmp$mfl.exceed[i]==1){
+        tmp$countdown[i]=365
+      }
+    }
+    
+    #identify yearly violations
+    if(tmp$countdown[i]<0){
+      if(tmp$mfl.exceed[i]==1){
+        if(tmp$mfl.exceed[i-1]!=1){
+          tmp$exceed2[i]=1
+          exc_n=exc_n+1}else{
+            tmp$exceed2[i]=0
+          }
+      }else{tmp$exceed2[i]=0}
+    }else{
+      if(tmp$countdown[i]==365 & tmp$exceed_end[i]==0){
+        tmp$exceed2[i]==1
+        exc_n=exc_n+1
+      }else{
+        tmp$exceed2[i]=0
+      }
+    }
+  }
+  
+  
+  counts
+  exc_n
+  
+  CRE.mfl.rslt=rbind(CRE.mfl.rslt,data.frame(Alt=alts[j],N.exceed=exc_n))
+  q.dat1.xtab.mfl=rbind(q.dat1.xtab.mfl,tmp)
+  print(j)
+}
+
+q.dat1.xtab.mfl$exc=with(q.dat1.xtab.mfl,ifelse(countdown<0&mfl.exceed==1,1,0))
+q.dat1.xtab.mfl$plot_exc=with(q.dat1.xtab.mfl,ifelse(countdown<0&mfl.exceed==1,S79.30d,NA))
+q.dat1.xtab.mfl$plot_exc365=with(q.dat1.xtab.mfl,ifelse(countdown>0&mfl.exceed==1,S79.30d,NA))
+
+for(i in 1:n.alts){
+  # png(filename=paste0(plot.path,"CRE_MFL_Alt_",alts[i],".png"),width=6.5,height=5,units="in",res=200,type="windows",bg="white")
+  layout(matrix(1:2,2,1),heights=c(1,0.2))
+  par(family="serif",mar=c(1,3,0.75,1),oma=c(1.5,1,2.5,0.5));
+  
+  ylim.val=c(0,15000);by.y=5000;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+  xlim.val=date.fun(c("1965-01-01","2006-01-01"));xmaj=seq(xlim.val[1],xlim.val[2],"10 years");xmin=seq(xlim.val[1],xlim.val[2],"1 years")
+  
+  plot(S79.30d~Date,q.dat1.xtab.mfl,type="n",yaxs="i",xlim=xlim.val,ylim=ylim.val,axes=F,ann=F)
+  abline(h=ymaj,v=xmaj,lty=1,col=adjustcolor("grey",0.5))
+  abline(h=457,col="brown",lty=2)
+  with(subset(q.dat1.xtab.mfl,Alt==alts[i]),lines(Date,S79.30d,col="blue",lty=1.5))
+  with(subset(q.dat1.xtab.mfl,Alt==alts[i]),lines(Date,plot_exc,col="orange",lty=1.5))
+  with(subset(q.dat1.xtab.mfl,Alt==alts[i]),lines(Date,plot_exc365,col="grey",lty=1.5))
+  axis_fun(1,xmaj,xmin,format(xmaj,"%Y"),line=-0.5)
+  axis_fun(2,ymaj,ymin,ymaj);box(lwd=1)
+  mtext(side=2,line=3,"Discharge (cfs)")
+  mtext(side=1,line=1.5,"Year")
+  mtext(side=3,paste0("MFL Recovery Water Body - Caloosahatchee River 30 Day Averege Flow at S79\n",
+                      alts[i]," : ",subset(CRE.mfl.rslt,Alt==alts[i])$N.exceed,
+                      " exceedance in 41 years of simualtion"))
+  plot(0:1,0:1,type="n",axes=F,ylab=NA,xlab=NA)
+  legend(0.5,-0.5,legend=c("30-day Moving Average","MFL Criteria (457 cfs)","Exceedance","Exceedance w/in 365 Days"),
+         pch=NA,
+         lty=c(1,2,1,1),lwd=2,
+         col=c("blue","brown","orange","grey"),
+         pt.bg=NA,
+         pt.cex=1.5,ncol=2,cex=1,bty="n",y.intersp=1,x.intersp=0.75,xpd=NA,xjust=0.5,yjust=0.5)
+  dev.off()
+}
+
+CRE.mfl.rslt=CRE.mfl.rslt[match(alts,CRE.mfl.rslt$Alt),]
+CRE.mfl.rslt$FWO_perchange=with(CRE.mfl.rslt,round(((N.exceed-N.exceed[2])/N.exceed[2])*100,2))
+
+# png(filename=paste0(plot.path,"CREMFL_Alts.png"),width=6.5,height=3.5,units="in",res=200,type="windows",bg="white")
+ylim.val=c(0,40);by.y=10;ymaj=seq(ylim.val[1],ylim.val[2],by.y);ymin=seq(ylim.val[1],ylim.val[2],by.y/2)
+par(family="serif",mar=c(2,2,0.5,0.25),oma=c(1,2,0.75,1),lwd=0.5);
+
+x=barplot(CRE.mfl.rslt$N.exceed,beside=F,ylim=ylim.val,col=NA,border=NA,axes=F,ann=F,names.arg=rep(NA,length(alts)))
+abline(h=ymaj,lty=1,col=adjustcolor("grey",0.5))
+barplot(CRE.mfl.rslt$N.exceed,beside=F,ylim=ylim.val,col=adjustcolor(cols.alts,0.5),axes=F,ann=F,names.arg=rep(NA,length(alts)),add=T)
+text(x,CRE.mfl.rslt$N.exceed,CRE.mfl.rslt$N.exceed,pos=3,offset=0.25)
+text(x,CRE.mfl.rslt$N.exceed,paste0(CRE.mfl.rslt$FWO_perchange,"%"),pos=1,font=3)
+axis_fun(1,x,x,alts,line=-0.5)
+axis_fun(2,ymaj,ymin,ymaj);box(lwd=1)
+mtext(side=2,line=2.5,"MFL Exceedances")
+mtext(side=1,line=1.75,"Alternative")
+mtext(side=3,adj=0,"Caloosahatchee MFL")
+mtext(side=3,adj=1,"CY 1965 - 2005")
+dev.off()
+
