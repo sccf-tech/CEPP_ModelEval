@@ -194,7 +194,40 @@ regq.dat.CY.mean2=read.csv(paste0(export.path,"EAA_totalQ_WCAs.csv"))
 
 * % Difference ECB vs C240: `r paste0(round(subset(regq.dat.CY.mean2,type=="total")$PerDiff_ECB,1),"%")`
 
----
-name: estuary
 
-### Add estuary salinity envelope metrics
+---
+name: CRE1
+
+### CRE - Salinity Envelope (2007 PM)
+
+```{r,out.width="100%",fig.align="center",fig.cap="Caloosahatchee salinity envelope evaluation (2007 RECOVER PMs)"}
+
+knitr::include_graphics("./Plots/RECOVER_CRE_SalEnv_2007PM.png")
+```
+
+---
+name: CRE2
+
+### CRE - Salinity Envelope (2020 PM)
+
+```{r,out.width="100%",fig.align="center",fig.cap="Caloosahatchee salinity envelope evaluation (2020 RECOVER PMs)"}
+
+knitr::include_graphics("./Plots/RECOVER_CRE_SalEnv_.png")
+```
+
+---
+name: CRE MFL
+
+### Caloosahatchee MFL
+
+```{r,out.width="100%",fig.align="center",fig.cap="Caloosahatchee MFL percent difference relative to FWO."}
+
+knitr::include_graphics("./Plots/CREMFL_Alts.png")
+```
+
+---
+name: SLE
+
+### SLE - Salinity Envelope
+
+* waiting on some additional modeling data
