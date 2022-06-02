@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>SCCF LOWRP</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Paul Julian" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/tabwid/tabwid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/WhiteBlue.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;  &lt;/span&gt;
+&lt;/div&gt;
+
+---
+name: title
+class: left, middle
+
+### CEPP PACR Evaluation
+
+.pull-left[
+
+
+*Sanibel-Captiva Conservation Foundation*
+
+*Conservancy of Southwest Florida*
+
+**DRAFT** - June 02, 2022
+
+]
+&lt;!-- this ends up being the title slide since seal = FALSE--&gt;
+
+.pull-right[
+&lt;img src="./Plots/SCCF Logo knockout_c.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="./Plots/ConSWFL.jpeg" width="40%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+.footnote[
+Paul Julian PhD&lt;br&gt;[<svg aria-hidden="true" role="img" viewBox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/></svg>](mailto: pjulian@sccf.org) .small[pjulian@sccf.org]
+
+.small[Use cursor keys for navigation, press .red["O"] for a slide .red[O]verview]
+
+<a href="https://sccf-tech.github.io/CEPP_ModelEval/slides/SCCF_CEPP_Eval.pdf">
+<button class="btn btn-primary btn-sm">Download PDF Version</button>
+</a>
+]
+
+---
+name: alternatives
+
+### General Description
+
+
+
+&lt;template id="a9477f9a-ee14-4b12-8142-828621ffe942"&gt;&lt;style&gt;
+.tabwid table{
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-spacing: 0;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-8f0571f8{border-collapse:collapse;}.cl-8efe71d2{font-family:'Times New Roman';font-size:12pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-8efe71d3{font-family:'Times New Roman';font-size:10pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-8efe98ce{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:0.1pt;padding-top:0.1pt;padding-left:0.1pt;padding-right:0.1pt;line-height: 1;background-color:transparent;}.cl-8efec13c{width:72pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8efec13d{width:360pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8efec13e{width:72pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8efec13f{width:360pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8efec140{width:72pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8efec141{width:360pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-8f0571f8'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8efec140"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d2"&gt;Alternative&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8efec141"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d2"&gt;Description&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8efec13c"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d3"&gt;ECB&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8efec13d"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d3"&gt;Modified Water Deliveries (MWD) complete; CERP projects in construction, not operational; WCA3/ENP Ops under ERTP; LORS08 &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8efec13c"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d3"&gt;FWO&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8efec13d"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d3"&gt;MWD, C111 South Dade, KRR, RS, TT next steps; CERP projects operational IRL-S, PSRP, C43, C111, CEPP; WCA3/ENP Ops under ERTP w/CEPP; LORS08 w/CEPP (LORS08++)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8efec13e"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d3"&gt;C240&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8efec13f"&gt;&lt;p class="cl-8efe98ce"&gt;&lt;span class="cl-8efe71d3"&gt;FWO + EAA Reservoir and STA (240,000 ac-ft above-ground reservoir &amp;amp; 6,500-acre STA)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="773554ab-fd52-4bb4-9052-6539c8d301da"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("773554ab-fd52-4bb4-9052-6539c8d301da");
+var template = document.getElementById("a9477f9a-ee14-4b12-8142-828621ffe942");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+* RSMBN modeling Period of Simulation - Jan 1, 1965 to Dec 31, 2005
+
+---
+name: RegQ
+
+### Regulatory Discharge
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="./Plots/AvgFloodControl.png" alt="Regulatory discharge from Lake Okeechobee" width="90%" /&gt;
+&lt;p class="caption"&gt;Regulatory discharge from Lake Okeechobee&lt;/p&gt;
+&lt;/div&gt;
+
+---
+name: RegQ
+
+### Regulatory Discharge
+
+
+&lt;template id="a0484ff0-1381-47a9-b890-cdbc0efb4f4f"&gt;&lt;style&gt;
+.tabwid table{
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-spacing: 0;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-8f258e20{border-collapse:collapse;}.cl-8f1d566a{font-family:'Times New Roman';font-size:13pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-8f1d566b{font-family:'Times New Roman';font-size:12pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-8f1d566c{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:1.5pt;padding-top:1.5pt;padding-left:1.5pt;padding-right:1.5pt;line-height: 1;background-color:transparent;}.cl-8f1d566d{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:1.5pt;padding-top:1.5pt;padding-left:1.5pt;padding-right:1.5pt;line-height: 1;background-color:transparent;}.cl-8f1d7d5c{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d5d{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d5e{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d5f{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d60{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d61{width:108pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d62{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d63{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d64{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d65{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1d7d66{width:108pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da44e{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da44f{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da450{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da451{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da452{width:108pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da453{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da454{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(255, 255, 255, 0.00);border-top: 0 solid rgba(255, 255, 255, 0.00);border-left: 0 solid rgba(255, 255, 255, 0.00);border-right: 0 solid rgba(255, 255, 255, 0.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da455{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da456{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da457{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1da458{width:86.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1dcb4a{width:54pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-8f1dcb4b{width:108pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-8f258e20'&gt;&lt;caption class="Table Caption"&gt;Mean annual flood control releases from Lake Okeechobe for the 41-year period of simulation with percent difference relative to FWO and ECB.&lt;/caption&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8f1da452"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td  colspan="3"class="cl-8f1da453"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;Average annual total discharge&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td  colspan="2"class="cl-8f1da450"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;Percent Difference&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8f1dcb4b"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;Region&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1dcb4a"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;ECB&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1da456"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;FWO&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1da455"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;C240&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1da458"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;FWO vs C240&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1da457"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566a"&gt;ECB vs C240&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8f1d7d61"&gt;&lt;p class="cl-8f1d566d"&gt;&lt;span class="cl-8f1d566b"&gt;EAA&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5c"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;60&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5d"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;298&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d60"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;502&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5e"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;68&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5f"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;737&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8f1d7d61"&gt;&lt;p class="cl-8f1d566d"&gt;&lt;span class="cl-8f1d566b"&gt;Caloosahatchee&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5c"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;420&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5d"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;258&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d60"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;172&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5e"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;-33&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5f"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;-59&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8f1d7d61"&gt;&lt;p class="cl-8f1d566d"&gt;&lt;span class="cl-8f1d566b"&gt;St. Lucie&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5c"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;198&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5d"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;126&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d60"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;104&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5e"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;-18&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d5f"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;-48&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-8f1d7d66"&gt;&lt;p class="cl-8f1d566d"&gt;&lt;span class="cl-8f1d566b"&gt;Lake Worth Lagoon&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d65"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;93&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d63"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;18&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1da44e"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;9&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d62"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;-52&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-8f1d7d64"&gt;&lt;p class="cl-8f1d566c"&gt;&lt;span class="cl-8f1d566b"&gt;-91&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="07c91162-a5f8-446d-bcd5-7c161e1d5c47"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("07c91162-a5f8-446d-bcd5-7c161e1d5c47");
+var template = document.getElementById("a0484ff0-1381-47a9-b890-cdbc0efb4f4f");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+
+---
+name: WCAs
+
+### Everglades Discharge
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="./Plots/DischargeWCAs.png" alt="Total discharges to WCAs from EAA during the 41-year peroid of simulation." width="75%" /&gt;
+&lt;p class="caption"&gt;Total discharges to WCAs from EAA during the 41-year peroid of simulation.&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+* % Difference FWO vs C240: 2.2%
+
+* % Difference ECB vs C240: 32.8%
+
+---
+name: estuary
+
+### Add estuary salinity envelope metrics
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
